@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <key-world>java</key-world>
+    <encoding>UTF-8</encoding>
+    <reader>
+        <urls>
+            <url><![CDATA[http://hh.ru/search/vacancy?items_on_page=500&order_by=publication_time&area=1&enable_snippets=true&text=%1$s&clusters=true&page=0]]></url>
+            <url><![CDATA[http://hh.ru/search/vacancy?items_on_page=500&order_by=publication_time&area=1&enable_snippets=true&text=%1$s&clusters=true&page=1]]></url>
+        </urls>
+        <page>
+            <block-start><![CDATA[<div class="search-result-item__description">]]></block-start>
+            <block-end><![CDATA[<div class="search-result-item__button]]></block-end>
+        </page>
+    </reader>
+    <writer>
+        <output-begin><![CDATA[
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html id="js-disabled" class="desktop no-placeholder">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+</head>
+<body><h1>Найдено вакансий: %1$2d</h1>]]></output-begin>
+        <output-end><![CDATA[</body></html>]]></output-end>
+        <delimeter><![CDATA[<hr />]]></delimeter>
+    </writer>
+</configuration>
