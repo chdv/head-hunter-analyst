@@ -19,7 +19,9 @@ public class AnalystMain {
 
     public void readSite(String keyWord) throws IOException {
         List<JobEntity> jobs = parser.readJobs(keyWord);
-        formatter.formatJobs(jobs, new FileOutputStream("result-" + keyWord + ".html"));
+        String newFileName = "headhunter-" + keyWord + ".html";
+        formatter.formatJobs(jobs, new FileOutputStream(newFileName));
+        logger.debug("save results to \"{}\"", newFileName);
     }
 
     public static void main(String args[]) throws IOException {

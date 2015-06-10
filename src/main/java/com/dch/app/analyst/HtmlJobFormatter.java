@@ -22,7 +22,7 @@ public class HtmlJobFormatter implements JobFormatter {
                 new BufferedWriter(
                         new OutputStreamWriter(
                                 stream,
-                                AnalystConfiguration.getEncoding()));
+                                AnalystConfiguration.getHHEncoding()));
         try {
             writer.write(String.format(outputBegin, jobs.size()));
             for (JobEntity entity : jobs) {

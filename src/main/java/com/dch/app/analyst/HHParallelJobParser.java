@@ -25,7 +25,7 @@ public class HHParallelJobParser extends HHJobParser {
         Queue result = new ConcurrentLinkedQueue();
         BufferedReader reader =
                 new BufferedReader(
-                        new InputStreamReader(input, AnalystConfiguration.getEncoding()));
+                        new InputStreamReader(input, AnalystConfiguration.getHHEncoding()));
         try {
             String line = null;
             while((line = reader.readLine())!=null) {

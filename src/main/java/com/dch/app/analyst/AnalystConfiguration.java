@@ -26,7 +26,7 @@ public final class AnalystConfiguration {
         return config;
     }
 
-    public static String getEncoding() {
+    public static String getHHEncoding() {
         return getConf().getString("encoding");
     }
 
@@ -56,5 +56,9 @@ public final class AnalystConfiguration {
 
     public static String getKeyWorld() {
         return getConf().getString("key-world");
+    }
+
+    public static String getConfEncoding() {
+        return "UTF-8";
     }
 }

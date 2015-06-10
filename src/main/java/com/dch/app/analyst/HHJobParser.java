@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -25,13 +25,11 @@ public class HHJobParser implements JobParser {
 
     public List<JobEntity> readJobs(String keyWord) throws JobParserException {
         List<String> urls = AnalystFactory.createList();
-
-        for(String s : AnalystConfiguration.getUrls()) {
-            urls.add(String.format(s, keyWord));
-        }
-
         List<JobEntity> result = null;
         try {
+            for(String s : AnalystConfiguration.getUrls()) {
+                urls.add(String.format(s, URLEncoder.encode(keyWord, AnalystConfiguration.getConfEncoding())));
+            }
             result = parseUrls(urls);
         } catch(Exception e) {
             throw new JobParserException(e);
@@ -45,6 +43,7 @@ public class HHJobParser implements JobParser {
 
         for(String url : urlList) {
             HttpGet httpGet = new HttpGet(url);
+            logger.debug("go to {}", url);
             CloseableHttpResponse response = httpclient.execute(httpGet);
             result.addAll(
                     parsePage(
@@ -62,7 +61,7 @@ public class HHJobParser implements JobParser {
         List<JobEntity> result = AnalystFactory.createList();
         BufferedReader reader =
                 new BufferedReader(
-                        new InputStreamReader(input, AnalystConfiguration.getEncoding()));
+                        new InputStreamReader(input, AnalystConfiguration.getHHEncoding()));
         try {
             String line = null;
             while((line = reader.readLine())!=null) {
