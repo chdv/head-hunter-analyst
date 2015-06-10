@@ -13,16 +13,17 @@ public final class AnalystConfiguration {
 
     private static Configuration config = null;
 
-    private AnalystConfiguration() {}
-
-    private static Configuration getConf() throws AnalystException {
-        if(config == null) {
-            try {
-                config = new XMLConfiguration("config/analyst-config.xml");
-            } catch (ConfigurationException e) {
-                throw new AnalystException(e);
-            }
+    static {
+        try {
+            config = new XMLConfiguration("config/analyst-config.xml");
+        } catch (ConfigurationException e) {
+            throw new AnalystException(e);
         }
+    }
+
+    private AnalystConfiguration() { }
+
+    private static Configuration getConf() {
         return config;
     }
 
