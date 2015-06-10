@@ -1,4 +1,7 @@
-package com.dch.app.analyst;
+package com.dch.app.analyst.format;
+
+import com.dch.app.analyst.AnalystConfiguration;
+import com.dch.app.analyst.parser.JobEntity;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

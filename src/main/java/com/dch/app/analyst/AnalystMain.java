@@ -1,5 +1,8 @@
 package com.dch.app.analyst;
 
+import com.dch.app.analyst.format.JobFormatter;
+import com.dch.app.analyst.parser.JobEntity;
+import com.dch.app.analyst.parser.JobParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +37,16 @@ public class AnalystMain {
     }
 
     public static void main(String args[]) throws IOException {
+        savePagesToLocalFiles();
+    }
+
+    /**
+     * Сохраняет содержимое выборки по ключевым словам с сайта hh.ru в локальные файлы, создает архив,
+     * и если указано в конфигурации, открывает сохраненные файла броузером.
+     *
+     * @throws IOException
+     */
+    private static void savePagesToLocalFiles() throws IOException {
         AnalystMain main = new AnalystMain();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
         String dir = OUT_DIR + File.separator + format.format(new Date());

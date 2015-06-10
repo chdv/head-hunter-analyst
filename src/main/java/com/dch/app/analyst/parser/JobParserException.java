@@ -1,4 +1,4 @@
-package com.dch.app.analyst;
+package com.dch.app.analyst.parser;
 
 /**
  * Created by ִלטענטי on 09.06.2015.

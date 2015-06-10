@@ -1,7 +1,5 @@
-package com.dch.app.analyst;
+package com.dch.app.analyst.parser;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**

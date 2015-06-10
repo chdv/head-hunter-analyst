@@ -1,5 +1,7 @@
-package com.dch.app.analyst;
+package com.dch.app.analyst.parser;
 
+import com.dch.app.analyst.AnalystConfiguration;
+import com.dch.app.analyst.AnalystFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

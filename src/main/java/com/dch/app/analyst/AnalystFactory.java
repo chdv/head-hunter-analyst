@@ -1,6 +1,9 @@
 package com.dch.app.analyst;
 
-import org.apache.commons.configuration.XMLConfiguration;
+import com.dch.app.analyst.format.HtmlJobFormatter;
+import com.dch.app.analyst.format.JobFormatter;
+import com.dch.app.analyst.parser.HHJobParser;
+import com.dch.app.analyst.parser.JobParser;
 
 import java.util.ArrayList;
 import java.util.Collection;

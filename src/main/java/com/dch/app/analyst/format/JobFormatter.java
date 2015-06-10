@@ -1,4 +1,6 @@
-package com.dch.app.analyst;
+package com.dch.app.analyst.format;
+
+import com.dch.app.analyst.parser.JobEntity;
 
 import java.io.IOException;
 import java.io.OutputStream;

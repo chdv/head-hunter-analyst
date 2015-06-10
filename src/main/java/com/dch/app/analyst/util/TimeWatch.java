@@ -1,11 +1,9 @@
-package com.dch.app.analyst;
+package com.dch.app.analyst.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
-
-import static java.lang.System.out;
 
 /** Класс для оценки времени исполнения блока
  * Created by Дмитрий on 08.06.2015.
@@ -19,7 +17,7 @@ public class TimeWatch {
     long startTime = 0;
     long endTime = 0;
 
-    TimeWatch() {
+    public TimeWatch() {
         startTime = getCurrentTime();
     }
 

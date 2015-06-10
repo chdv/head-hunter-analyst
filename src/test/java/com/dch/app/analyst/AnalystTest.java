@@ -1,5 +1,9 @@
 package com.dch.app.analyst;
 
+import com.dch.app.analyst.format.JobFormatter;
+import com.dch.app.analyst.parser.FileJobParser;
+import com.dch.app.analyst.parser.JobEntity;
+import com.dch.app.analyst.parser.JobParser;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -30,7 +34,7 @@ public class AnalystTest extends TestCase {
         return new TestSuite( AnalystTest.class );
     }
 
-    public void testAnalyst() throws IOException {
+    public void testFromLocalFile() throws IOException {
         String keyWorld = AnalystConfiguration.getKeyWorlds().get(0);
         List<JobEntity> jobs = parser.readJobs(keyWorld);
         logger.debug("job size = {}", jobs.size());
