@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,15 +20,20 @@ public class AnalystMain {
 
     private JobParser parser = AnalystFactory.createJobParser();
 
-    public void readSite(String keyWord) throws IOException {
+    public void readSite(String keyWord, File file) throws IOException {
         List<JobEntity> jobs = parser.readJobs(keyWord);
-        String newFileName = "headhunter-" + keyWord + ".html";
-        formatter.formatJobs(keyWord, jobs, new FileOutputStream(newFileName));
-        logger.debug("save results to \"{}\"", newFileName);
+        formatter.formatJobs(keyWord, jobs, new FileOutputStream(file));
+        logger.debug("save results to \"{}\"", file.getAbsolutePath());
     }
 
     public static void main(String args[]) throws IOException {
         AnalystMain main = new AnalystMain();
-        main.readSite(AnalystConfiguration.getKeyWorld());
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+        String dir = "out" + File.separator + format.format(new Date());
+        new File(dir).mkdirs();
+        for(String world : AnalystConfiguration.getKeyWorlds()) {
+            File newFile = new File(dir  + File.separator + "headhunter-" + world + ".html");
+            main.readSite(world, newFile);
+        }
     }
 }

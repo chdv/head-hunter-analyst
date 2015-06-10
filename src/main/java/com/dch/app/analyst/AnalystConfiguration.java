@@ -54,8 +54,8 @@ public final class AnalystConfiguration {
         return getConf().getString("writer.output-end");
     }
 
-    public static String getKeyWorld() {
-        return getConf().getString("key-world");
+    public static List<String>  getKeyWorlds() {
+        return (List<String>)(Object)getConf().getList("key-worlds.key-world");
     }
 
     public static String getConfEncoding() {

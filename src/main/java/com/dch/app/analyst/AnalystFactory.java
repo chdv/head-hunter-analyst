@@ -33,7 +33,7 @@ public final class AnalystFactory {
     }
 
     public static JobParser createJobParser() {
-        return new HHParallelJobParser();
+        return new HHJobParser();
     }
 
 }

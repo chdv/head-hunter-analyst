@@ -22,8 +22,6 @@ public class AnalystTest extends TestCase {
 
     private JobParser parser = new FileJobParser();
 
-    final String resultFileName = "result-test.html";
-
     public AnalystTest( String testName ) {
         super( testName );
     }
@@ -33,11 +31,13 @@ public class AnalystTest extends TestCase {
     }
 
     public void testAnalyst() throws IOException {
-        List<JobEntity> jobs = parser.readJobs(AnalystConfiguration.getKeyWorld());
+        String keyWorld = AnalystConfiguration.getKeyWorlds().get(0);
+        List<JobEntity> jobs = parser.readJobs(keyWorld);
         logger.debug("job size = {}", jobs.size());
         assertTrue(jobs.size() == 841 );
+        String resultFileName = "headhunter-" + keyWorld + ".html";
         File out = new File(resultFileName);
-        formatter.formatJobs(AnalystConfiguration.getKeyWorld(), jobs, new FileOutputStream(resultFileName));
+        formatter.formatJobs(keyWorld, jobs, new FileOutputStream(resultFileName));
         out.delete();
     }
 }
