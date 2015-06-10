@@ -56,7 +56,7 @@ public class AnalystMain {
         for(File f : new File(ARCHIVE_DIR).listFiles()) {
             if(f.getName().startsWith(zipFileName)) {
                 logger.debug("today archive file already exists");
-                return; // today archive file already exists
+                return;
             }
         }
         File zipFile = new File(dir.getPath() + File.separator + zipFileName + ".zip");
