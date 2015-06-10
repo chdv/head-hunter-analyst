@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface JobFormatter {
 
-    void formatJobs(List<JobEntity> list, OutputStream stream) throws IOException;
+    void formatJobs(String title, List<JobEntity> list, OutputStream stream) throws IOException;
 }

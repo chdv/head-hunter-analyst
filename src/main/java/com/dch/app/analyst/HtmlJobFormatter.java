@@ -17,14 +17,14 @@ public class HtmlJobFormatter implements JobFormatter {
 
     private static final String delimeter = AnalystConfiguration.getDelimeter();
 
-    public void formatJobs(List<JobEntity> jobs, OutputStream stream) throws IOException {
+    public void formatJobs(String title, List<JobEntity> jobs, OutputStream stream) throws IOException {
         BufferedWriter writer =
                 new BufferedWriter(
                         new OutputStreamWriter(
                                 stream,
                                 AnalystConfiguration.getHHEncoding()));
         try {
-            writer.write(String.format(outputBegin, jobs.size()));
+            writer.write(String.format(outputBegin, title, jobs.size()));
             for (JobEntity entity : jobs) {
                 writer.write(entity.getJobInfo());
                 writer.write(delimeter);

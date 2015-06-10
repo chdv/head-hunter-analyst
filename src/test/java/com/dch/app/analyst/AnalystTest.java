@@ -33,11 +33,11 @@ public class AnalystTest extends TestCase {
     }
 
     public void testAnalyst() throws IOException {
-        List<JobEntity> jobs = parser.readJobs("java");
+        List<JobEntity> jobs = parser.readJobs(AnalystConfiguration.getKeyWorld());
         logger.debug("job size = {}", jobs.size());
         assertTrue(jobs.size() == 841 );
         File out = new File(resultFileName);
-        formatter.formatJobs(jobs, new FileOutputStream(resultFileName));
+        formatter.formatJobs(AnalystConfiguration.getKeyWorld(), jobs, new FileOutputStream(resultFileName));
         out.delete();
     }
 }

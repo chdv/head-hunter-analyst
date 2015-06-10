@@ -20,7 +20,7 @@ public class AnalystMain {
     public void readSite(String keyWord) throws IOException {
         List<JobEntity> jobs = parser.readJobs(keyWord);
         String newFileName = "headhunter-" + keyWord + ".html";
-        formatter.formatJobs(jobs, new FileOutputStream(newFileName));
+        formatter.formatJobs(keyWord, jobs, new FileOutputStream(newFileName));
         logger.debug("save results to \"{}\"", newFileName);
     }
 
