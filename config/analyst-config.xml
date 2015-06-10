@@ -7,6 +7,7 @@
         <key-world>системный аналитик</key-world>
         <key-world>аналитик гост</key-world>
     </key-worlds>
+    <open-in-browser>false</open-in-browser>
     <encoding>UTF-8</encoding>
     <reader>
         <urls>

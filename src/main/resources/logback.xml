@@ -3,7 +3,7 @@
 
     <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
 
-    <property name="DEV_HOME" value="c:/logs" />
+    <property name="DEV_HOME" value="out/logs" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">

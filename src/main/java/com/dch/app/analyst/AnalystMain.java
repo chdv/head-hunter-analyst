@@ -9,17 +9,23 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by ִלטענטי on 08.06.2015.
  */
 public class AnalystMain {
 
-    Logger logger = LoggerFactory.getLogger(AnalystMain.class);
+    private static Logger logger = LoggerFactory.getLogger(AnalystMain.class);
 
     private JobFormatter formatter = AnalystFactory.createJobFormatter();
 
     private JobParser parser = AnalystFactory.createJobParser();
+
+    private static String OUT_DIR = "out";
+
+    private static String ARCHIVE_DIR = OUT_DIR + File.separator + "archive";
 
     public void readSite(String keyWord, File file) throws IOException {
         List<JobEntity> jobs = parser.readJobs(keyWord);
@@ -30,12 +36,44 @@ public class AnalystMain {
     public static void main(String args[]) throws IOException {
         AnalystMain main = new AnalystMain();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
-        String dir = "out" + File.separator + format.format(new Date());
-        new File(dir).mkdirs();
+        String dir = OUT_DIR + File.separator + format.format(new Date());
+        File dirFile = new File(dir);
+        dirFile.mkdirs();
         for(String world : AnalystConfiguration.getKeyWorlds()) {
             File newFile = new File(dir  + File.separator + world + ".html");
             main.readSite(world, newFile);
-            Desktop.getDesktop().browse(newFile.toURI());
+            if(AnalystConfiguration.isOpenInBrowser()) {
+                Desktop.getDesktop().browse(newFile.toURI());
+            }
         }
+        createZipArchive(dirFile);
+    }
+
+    private static void createZipArchive(File dirFile) throws IOException {
+        File dir = new File(ARCHIVE_DIR);
+        String zipFileName = dirFile.getName().substring(0, 10);
+        dir.mkdirs();
+        for(File f : new File(ARCHIVE_DIR).listFiles()) {
+            if(f.getName().startsWith(zipFileName)) {
+                logger.debug("today archive file already exists");
+                return; // today archive file already exists
+            }
+        }
+        File zipFile = new File(dir.getPath() + File.separator + zipFileName + ".zip");
+        ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(zipFile));
+        for(File f : dirFile.listFiles()) {
+            ZipEntry entry = new ZipEntry(f.getName());
+            FileInputStream fis = new FileInputStream(f);
+            zout.putNextEntry(entry);
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = fis.read(bytes)) >= 0) {
+                zout.write(bytes, 0, length);
+            }
+            zout.closeEntry();
+            fis.close();
+        }
+        zout.close();
+        logger.debug("make archive {}", zipFile.getAbsolutePath());
     }
 }

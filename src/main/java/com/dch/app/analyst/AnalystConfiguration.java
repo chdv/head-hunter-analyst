@@ -18,7 +18,7 @@ public final class AnalystConfiguration {
     private static Configuration getConf() throws AnalystException {
         if(config == null) {
             try {
-                config = new XMLConfiguration("analyst-config.xml");
+                config = new XMLConfiguration("config/analyst-config.xml");
             } catch (ConfigurationException e) {
                 throw new AnalystException(e);
             }
@@ -60,5 +60,9 @@ public final class AnalystConfiguration {
 
     public static String getConfEncoding() {
         return "UTF-8";
+    }
+
+    public static Boolean isOpenInBrowser() {
+        return getConf().getBoolean("open-in-browser");
     }
 }
