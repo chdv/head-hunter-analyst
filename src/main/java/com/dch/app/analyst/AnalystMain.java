@@ -3,6 +3,7 @@ package com.dch.app.analyst;
 import com.dch.app.analyst.format.JobFormatter;
 import com.dch.app.analyst.parser.JobEntity;
 import com.dch.app.analyst.parser.JobParser;
+import com.dch.app.analyst.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,34 +60,8 @@ public class AnalystMain {
                 Desktop.getDesktop().browse(newFile.toURI());
             }
         }
-        createZipArchive(dirFile);
-    }
-
-    private static void createZipArchive(File dirFile) throws IOException {
-        File dir = new File(ARCHIVE_DIR);
-        String zipFileName = dirFile.getName().substring(0, 10);
-        dir.mkdirs();
-        for(File f : new File(ARCHIVE_DIR).listFiles()) {
-            if(f.getName().startsWith(zipFileName)) {
-                logger.debug("today archive file already exists");
-                return;
-            }
-        }
-        File zipFile = new File(dir.getPath() + File.separator + zipFileName + ".zip");
-        ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(zipFile));
-        for(File f : dirFile.listFiles()) {
-            ZipEntry entry = new ZipEntry(f.getName());
-            FileInputStream fis = new FileInputStream(f);
-            zout.putNextEntry(entry);
-            byte[] bytes = new byte[1024];
-            int length;
-            while ((length = fis.read(bytes)) >= 0) {
-                zout.write(bytes, 0, length);
-            }
-            zout.closeEntry();
-            fis.close();
-        }
-        zout.close();
-        logger.debug("make archive {}", zipFile.getAbsolutePath());
+        File dirTo = new File(ARCHIVE_DIR);
+        dirTo.mkdirs();
+        FileUtils.createZipArchive(dirFile, dirTo);
     }
 }
