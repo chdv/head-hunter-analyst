@@ -13,7 +13,7 @@ public final class AnalystConfiguration {
 
     private static Configuration config = null;
 
-    private AnalystConfiguration() {};
+    private AnalystConfiguration() {}
 
     private static Configuration getConf() throws AnalystException {
         if(config == null) {
