@@ -11,7 +11,7 @@ import java.util.List;
  * —качанные данные с hh.ru предварительно сохранены в файлы
  * Created by ƒмитрий on 09.06.2015.
  */
-public class FileJobParser extends HHParallelJobParser {
+public class FileJobParser extends HHJobParser {
 
     Logger logger = LoggerFactory.getLogger(FileJobParser.class);
 

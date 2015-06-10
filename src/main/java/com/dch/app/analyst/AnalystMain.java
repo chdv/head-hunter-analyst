@@ -3,6 +3,7 @@ package com.dch.app.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,8 +33,9 @@ public class AnalystMain {
         String dir = "out" + File.separator + format.format(new Date());
         new File(dir).mkdirs();
         for(String world : AnalystConfiguration.getKeyWorlds()) {
-            File newFile = new File(dir  + File.separator + "headhunter-" + world + ".html");
+            File newFile = new File(dir  + File.separator + world + ".html");
             main.readSite(world, newFile);
+            Desktop.getDesktop().browse(newFile.toURI());
         }
     }
 }

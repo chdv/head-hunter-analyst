@@ -35,7 +35,7 @@ public class AnalystTest extends TestCase {
         List<JobEntity> jobs = parser.readJobs(keyWorld);
         logger.debug("job size = {}", jobs.size());
         assertTrue(jobs.size() == 841 );
-        String resultFileName = "headhunter-" + keyWorld + ".html";
+        String resultFileName = keyWorld + ".html";
         File out = new File(resultFileName);
         formatter.formatJobs(keyWorld, jobs, new FileOutputStream(resultFileName));
         out.delete();

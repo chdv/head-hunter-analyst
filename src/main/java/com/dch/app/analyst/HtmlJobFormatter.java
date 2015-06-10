@@ -4,6 +4,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +20,8 @@ public class HtmlJobFormatter implements JobFormatter {
 
     private static final String delimeter = AnalystConfiguration.getDelimeter();
 
+    private DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
     public void formatJobs(String title, List<JobEntity> jobs, OutputStream stream) throws IOException {
         BufferedWriter writer =
                 new BufferedWriter(
@@ -24,7 +29,7 @@ public class HtmlJobFormatter implements JobFormatter {
                                 stream,
                                 AnalystConfiguration.getHHEncoding()));
         try {
-            writer.write(String.format(outputBegin, title, jobs.size()));
+            writer.write(String.format(outputBegin, title, jobs.size(), format.format(new Date())));
             for (JobEntity entity : jobs) {
                 writer.write(entity.getJobInfo());
                 writer.write(delimeter);

@@ -2,10 +2,10 @@
 <configuration>
     <key-worlds>
         <key-world>java</key-world>
+        <key-world>j2ee</key-world>
+        <key-world>scala</key-world>
         <key-world>системный аналитик</key-world>
         <key-world>аналитик гост</key-world>
-        <key-world>scala</key-world>
-        <key-world>j2ee</key-world>
     </key-worlds>
     <encoding>UTF-8</encoding>
     <reader>
@@ -24,7 +24,7 @@
 <html id="js-disabled" class="desktop no-placeholder">
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>%1$2s - вакансии c hh.ru</title></head>
-<body><h1>Найдено вакансий: %2$2d</h1>]]></output-begin>
+<body><h1>%1$2s - найдено вакансий: %2$2d</h1><h3>Актуально на %3$2s</h3>]]></output-begin>
         <output-end><![CDATA[</body></html>]]></output-end>
         <delimeter><![CDATA[<hr />]]></delimeter>
     </writer>
