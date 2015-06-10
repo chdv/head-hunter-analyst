@@ -13,6 +13,8 @@ import java.util.Queue;
 import java.util.concurrent.*;
 
 /**
+ * TODO переделать для работы с набором ключевых слов. В настоящий момент класс не актуален и не используется
+ *
  * Created by Дмитрий on 09.06.2015.
  */
 public class HHParallelJobParser extends HHJobParser {
