@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * Created by Дмитрий on 08.06.2015.
@@ -43,7 +43,7 @@ public class AnalystMain {
 
     /**
      * Сохраняет содержимое выборки по ключевым словам с сайта hh.ru в локальные файлы, создает архив,
-     * и если указано в конфигурации, открывает сохраненные файла броузером.
+     * и если указано в конфигурации, открывает сохраненные файлы броузером.
      *
      * @throws IOException
      */
