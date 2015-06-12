@@ -7,6 +7,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ * Изначально в программе использовался класс java.util.concurrent.ThreadPoolExecutor, но из-за моей ошибки в коде
+ * класса ForkJoinRunner программа вела себя довольно удивительно и непредсказуемо. Поэтому я реализовал ThreadPool сам,
+ * а потом уже нашел ошибку. Возвращать ThreadPoolExecutor не стал, просто моя реализация вроде работаект корректно,
+ * а реализация Дага Ли по сравнению с моей довольно перегружена не нужным в настоящий момент функционалом.
+ *
  * Created by Дмитрий on 12.06.2015.
  */
 public class FixedThreadPool implements ThreadPool {
@@ -15,13 +20,14 @@ public class FixedThreadPool implements ThreadPool {
 
     private int size;
     private volatile BlockingQueue<Runnable> runQueue = new LinkedBlockingQueue<Runnable>();
-    private PoolWorker[] workers;
+
+    private Thread[] threads;
 
     private volatile boolean run = true;
 
     public FixedThreadPool(int size) {
         this.size = size;
-        initWorkers();
+        initThreads();
     }
 
     public void execute(Runnable run) {
@@ -36,28 +42,26 @@ public class FixedThreadPool implements ThreadPool {
         return runQueue.size();
     }
 
-    private void initWorkers() {
-        workers = new PoolWorker[size];
+    private void initThreads() {
+        threads = new Thread[size];
         for (int i = 0; i < size; i++) {
-            workers[i] = new PoolWorker();
-            workers[i].start();
+            threads[i] = new Thread(new PoolWorker());
+            threads[i].start();
         }
     }
 
-    private class PoolWorker extends Thread {
+    private class PoolWorker implements Runnable {
         public void run() {
-            Runnable runnable;
             while (run) {
                 try {
-                    runnable = runQueue.take();
-                    if(runnable!=stopRunnable) {
-                        runnable.run();
+                    Runnable executionRunnable = runQueue.take();
+                    if(executionRunnable!=stopRunnable) {
+                        executionRunnable.run();
                     }
                 } catch (InterruptedException ignored) {
                     /*NOP*/
                 } catch (RuntimeException e) {
                     logger.error(e.getMessage(), e);
-                } finally {
                 }
             }
         }
@@ -80,7 +84,8 @@ public class FixedThreadPool implements ThreadPool {
             for (int i = 0; i < size; i++) {
                 runQueue.put(stopRunnable);
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
+            /* NOP */
         }
     }
 }
