@@ -4,6 +4,7 @@ import com.dch.app.analyst.format.JobFormatter;
 import com.dch.app.analyst.parser.JobEntity;
 import com.dch.app.analyst.parser.JobParser;
 import com.dch.app.analyst.util.FileUtils;
+import com.dch.app.analyst.util.ForkJoinRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +28,9 @@ public class AnalystMain {
 
     private JobParser parser = AnalystFactory.createJobParser();
 
-    private static String OUT_DIR = "out";
+    private static final String OUT_DIR = "out";
 
-    private static String ARCHIVE_DIR = OUT_DIR + File.separator + "archive";
+    private static final String ARCHIVE_DIR = OUT_DIR + File.separator + "archive";
 
     public void readSite(String keyWord, File file) throws IOException {
         List<JobEntity> jobs = parser.readJobs(keyWord);
@@ -53,15 +54,43 @@ public class AnalystMain {
         String dir = OUT_DIR + File.separator + format.format(new Date());
         File dirFile = new File(dir);
         dirFile.mkdirs();
-        for(String world : AnalystConfiguration.getKeyWorlds()) {
-            File newFile = new File(dir  + File.separator + world + ".html");
-            main.readSite(world, newFile);
-            if(AnalystConfiguration.isOpenInBrowser()) {
-                Desktop.getDesktop().browse(newFile.toURI());
-            }
-        }
+        main.processKeyWorlds(dir);
         File dirTo = new File(ARCHIVE_DIR);
         dirTo.mkdirs();
         FileUtils.createZipArchive(dirFile, dirTo);
     }
+
+    private void processKeyWorlds(final String dir) throws IOException {
+        ForkJoinRunner runner = AnalystFactory.createForkJoinRunner();
+        for(String world : AnalystConfiguration.getKeyWorlds()) {
+            runner.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        processKeyWorld(dir, world);
+                    } catch (IOException e) {
+                        throw new AnalystException(e);
+                    }
+                }
+            });
+        }
+        runner.await();
+        logger.debug("end work");
+        AnalystFactory.getMainThreadPool().stop();
+    }
+
+    /*private void processKeyWorlds(final String dir) throws IOException {
+        for(String world : AnalystConfiguration.getKeyWorlds()) {
+            processKeyWorld(dir, world);
+        }
+    }*/
+
+    private void processKeyWorld(String dir, String world) throws IOException {
+        File newFile = new File(dir  + File.separator + world + ".html");
+        readSite(world, newFile);
+        if(AnalystConfiguration.isOpenInBrowser()) {
+            Desktop.getDesktop().browse(newFile.toURI());
+        }
+    }
+
 }

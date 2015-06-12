@@ -2,6 +2,7 @@ package com.dch.app.analyst.parser;
 
 import com.dch.app.analyst.AnalystConfiguration;
 import com.dch.app.analyst.AnalystFactory;
+import com.dch.app.analyst.util.ForkJoinRunner;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -22,8 +23,8 @@ public class HHJobParser implements JobParser {
 
     Logger logger = LoggerFactory.getLogger(HHJobParser.class);
 
-    protected String jobBlockStart = AnalystConfiguration.getBlockStart();
-    protected String jobBlockEnd = AnalystConfiguration.getBlockEnd();
+    protected final String jobBlockStart = AnalystConfiguration.getBlockStart();
+    protected final String jobBlockEnd = AnalystConfiguration.getBlockEnd();
 
     public List<JobEntity> readJobs(String keyWord) throws JobParserException {
         List<String> urls = AnalystFactory.createList();
@@ -51,13 +52,9 @@ public class HHJobParser implements JobParser {
                     parsePage(
                             response.getEntity().getContent()));
         }
-        processEnding();
-
         httpclient.close();
         return result;
     }
-
-    protected void processEnding() throws Exception { }
 
     protected List<JobEntity> parsePage(InputStream input) throws Exception {
         List<JobEntity> result = AnalystFactory.createList();
@@ -65,12 +62,20 @@ public class HHJobParser implements JobParser {
                 new BufferedReader(
                         new InputStreamReader(input, AnalystConfiguration.getHHEncoding()));
         try {
+            ForkJoinRunner runner = AnalystFactory.createForkJoinRunner();
             String line = null;
             while((line = reader.readLine())!=null) {
-                if(line.contains(jobBlockStart)) {
-                    result.add(parseLine(line));
-                }
+                final String finalLine = line;
+                runner.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(finalLine.contains(jobBlockStart)) {
+                            result.add(parseLine(finalLine));
+                        }
+                    }
+                });
             }
+            runner.await();
         } finally {
             reader.close();
         }
