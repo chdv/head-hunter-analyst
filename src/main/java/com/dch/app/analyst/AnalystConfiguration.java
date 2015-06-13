@@ -70,4 +70,8 @@ public final class AnalystConfiguration {
     public static Boolean isOpenInBrowser() {
         return getConf().getBoolean("open-in-browser");
     }
+
+    public static int getThreadsCountPerCore() {
+        return getConf().getInt("threads-count-per-core");
+    }
 }

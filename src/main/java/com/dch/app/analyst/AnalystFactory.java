@@ -7,6 +7,8 @@ import com.dch.app.analyst.parser.JobParser;
 import com.dch.app.analyst.util.FixedThreadPool;
 import com.dch.app.analyst.util.ForkJoinRunner;
 import com.dch.app.analyst.util.ThreadPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,12 +19,15 @@ import java.util.List;
  */
 public final class AnalystFactory {
 
+    private static Logger logger = LoggerFactory.getLogger(AnalystFactory.class);
+
     private static volatile ThreadPool mainThreadPool = null;
 
     private AnalystFactory() {}
 
     private static ThreadPool createThreadPool() {
-        int poolSize = Runtime.getRuntime().availableProcessors() * 4;
+        int poolSize = Runtime.getRuntime().availableProcessors() * AnalystConfiguration.getThreadsCountPerCore();
+        logger.debug("create ThreadPool on " + poolSize + " threads");
         return new FixedThreadPool(poolSize);
     }
 

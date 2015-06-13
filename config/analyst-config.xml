@@ -7,13 +7,17 @@
         <key-world>системный аналитик</key-world>
         <key-world>аналитик гост</key-world>
     </key-worlds>
-    <open-in-browser>true</open-in-browser>
+    <open-in-browser>false</open-in-browser>
+    <threads-count-per-core>4</threads-count-per-core>
     <encoding>UTF-8</encoding>
     <reader>
         <urls>
             <url><![CDATA[http://hh.ru/search/vacancy?items_on_page=500&order_by=publication_time&area=1&enable_snippets=true&text=%1$s&clusters=true&page=0]]></url>
             <url><![CDATA[http://hh.ru/search/vacancy?items_on_page=500&order_by=publication_time&area=1&enable_snippets=true&text=%1$s&clusters=true&page=1]]></url>
         </urls>
+        <!--urls>
+            <url><![CDATA[http://hh.ru/search/vacancy?items_on_page=10&order_by=publication_time&area=1&enable_snippets=true&text=%1$s&clusters=true&page=0]]></url>
+        </urls-->
         <page>
             <block-start><![CDATA[<div class="search-result-item__description">]]></block-start>
             <block-end><![CDATA[<div class="search-result-item__button]]></block-end>
