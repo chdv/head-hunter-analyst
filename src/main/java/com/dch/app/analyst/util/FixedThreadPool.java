@@ -7,11 +7,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Изначально в программе использовался класс java.util.concurrent.ThreadPoolExecutor, но из-за моей ошибки в коде
- * класса ForkJoinRunner программа вела себя довольно удивительно и непредсказуемо. Поэтому я реализовал ThreadPool сам,
- * а потом уже нашел ошибку. Возвращать ThreadPoolExecutor не стал, просто моя реализация вроде работаект корректно,
- * а реализация Дага Ли по сравнению с моей довольно перегружена не нужным в настоящий момент функционалом.
- *
  * Created by Дмитрий on 12.06.2015.
  */
 public class FixedThreadPool implements ThreadPool {
