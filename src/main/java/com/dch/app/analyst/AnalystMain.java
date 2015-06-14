@@ -1,8 +1,10 @@
 package com.dch.app.analyst;
 
-import com.dch.app.analyst.format.JobFormatter;
-import com.dch.app.analyst.parser.JobEntity;
-import com.dch.app.analyst.parser.JobParser;
+import com.dch.app.analyst.format.HtmlJobsWriter;
+import com.dch.app.analyst.format.JobsWriter;
+import com.dch.app.analyst.format.Renamer;
+import com.dch.app.analyst.parser.SiteParser;
+import com.dch.app.analyst.parser.SiteInfo;
 import com.dch.app.analyst.util.FileUtils;
 import com.dch.app.analyst.util.ForkJoinRunner;
 import org.slf4j.Logger;
@@ -10,12 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by ƒмитрий on 08.06.2015.
@@ -24,18 +24,11 @@ public class AnalystMain {
 
     private static Logger logger = LoggerFactory.getLogger(AnalystMain.class);
 
-    private JobFormatter formatter = AnalystFactory.createJobFormatter();
-
-    private JobParser parser = AnalystFactory.createJobParser();
-
     private static final String OUT_DIR = "out";
 
     private static final String ARCHIVE_DIR = OUT_DIR + File.separator + "archive";
 
-    public void readSite(String keyWord, File file) throws IOException {
-        List<JobEntity> jobs = parser.readJobs(keyWord);
-        formatter.formatJobs(keyWord, jobs, new FileOutputStream(file));
-        logger.debug("save results to \"{}\"", file.getAbsolutePath());
+    private AnalystMain() {
     }
 
     public static void main(String args[]) throws IOException {
@@ -54,43 +47,63 @@ public class AnalystMain {
         String dir = OUT_DIR + File.separator + format.format(new Date());
         File dirFile = new File(dir);
         dirFile.mkdirs();
-        main.processKeyWorlds(dir);
-        File dirTo = new File(ARCHIVE_DIR);
-        dirTo.mkdirs();
-        FileUtils.createZipArchive(dirFile, dirTo);
-    }
+        File archiveDir = new File(ARCHIVE_DIR);
+        archiveDir.mkdirs();
 
-    private void processKeyWorlds(final String dir) throws IOException {
         ForkJoinRunner runner = AnalystFactory.createForkJoinRunner();
-        for(String world : AnalystConfiguration.getKeyWorlds()) {
+        for(SiteInfo site : AnalystConfiguration.getSites()) {
             runner.execute(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        processKeyWorld(dir, world);
+                        main.processSite(site, dir);
                     } catch (IOException e) {
                         throw new AnalystException(e);
                     }
                 }
             });
         }
-        runner.await();
+        runner.awaitJobsDone();
         logger.debug("end work");
         AnalystFactory.getMainThreadPool().stop();
+
+        FileUtils.createZipArchive(dirFile, archiveDir);
     }
 
-    /*private void processKeyWorlds(final String dir) throws IOException {
-        for(String world : AnalystConfiguration.getKeyWorlds()) {
-            processKeyWorld(dir, world);
-        }
-    }*/
+    private void processSite(SiteInfo site, final String dir) throws IOException {
+        ForkJoinRunner runner = AnalystFactory.createForkJoinRunner();
 
-    private void processKeyWorld(String dir, String world) throws IOException {
-        File newFile = new File(dir  + File.separator + world + ".html");
-        readSite(world, newFile);
+        for(String world : AnalystConfiguration.getKeyWorlds()) {
+            runner.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        processKeyWorld(site,  dir, world);
+                    } catch (IOException e) {
+                        throw new AnalystException(e);
+                    }
+                }
+            });
+        }
+        runner.awaitJobsDone();
+    }
+
+    private void processKeyWorld(SiteInfo site, String dir, String keyWord) throws IOException {
+        String f = dir  + File.separator + site.getName() + "-" + keyWord;
+        File newFile = new File(f);
+        // ренеймер добавл€ет в конец названи€ файла количество найденных вакансий
+        Renamer renamer = new Renamer(f);
+        JobsWriter jobsWriter = new HtmlJobsWriter(site, keyWord, newFile, renamer);
+        jobsWriter.writeTop();
+        SiteParser parser = site.createJobParser();
+        parser.setJobsWriter(jobsWriter);
+        parser.readJobs(keyWord);
+        jobsWriter.writeBottom();
+
         if(AnalystConfiguration.isOpenInBrowser()) {
             Desktop.getDesktop().browse(newFile.toURI());
         }
     }
+
 
 }

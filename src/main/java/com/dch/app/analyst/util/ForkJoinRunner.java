@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by ִלטענטי on 12.06.2015.
  */
-public class ForkJoinRunner {
+public class ForkJoinRunner implements IForkJoinRunner {
 
     private Logger logger = LoggerFactory.getLogger(ForkJoinRunner.class);
 
@@ -35,7 +35,7 @@ public class ForkJoinRunner {
         });
     }
 
-    public void await() {
+    public void awaitJobsDone() {
         mainLock.lock();
         try {
             while(!tasksSet.isEmpty()) {

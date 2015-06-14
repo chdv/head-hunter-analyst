@@ -1,9 +1,5 @@
 package com.dch.app.analyst;
 
-import com.dch.app.analyst.format.HtmlJobFormatter;
-import com.dch.app.analyst.format.JobFormatter;
-import com.dch.app.analyst.parser.HHJobParser;
-import com.dch.app.analyst.parser.JobParser;
 import com.dch.app.analyst.util.FixedThreadPool;
 import com.dch.app.analyst.util.ForkJoinRunner;
 import com.dch.app.analyst.util.ThreadPool;
@@ -48,14 +44,6 @@ public final class AnalystFactory {
 
     public static <T> List<T> createList(Collection c) {
         return new ArrayList<T>(c);
-    }
-
-    public static JobFormatter createJobFormatter() {
-        return new HtmlJobFormatter();
-    }
-
-    public static JobParser createJobParser() {
-        return new HHJobParser();
     }
 
     public static ForkJoinRunner createForkJoinRunner() {

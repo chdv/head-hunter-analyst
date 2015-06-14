@@ -1,5 +1,6 @@
 package com.dch.app.analyst;
 
+import com.dch.app.analyst.parser.SiteInfo;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -30,21 +31,17 @@ public final class AnalystConfiguration {
 
     private AnalystConfiguration() { }
 
+//    public static String getSiteEncoding() {
+//        return getConf().getString("encoding");
+//    }
 
-    public static String getHHEncoding() {
-        return getConf().getString("encoding");
-    }
-
-    public static List<String> getUrls() {
-        return (List<String>)(Object)getConf().getList("reader.urls.url");
-    }
-
-    public static String getBlockStart() {
-        return getConf().getString("reader.page.block-start");
-    }
-
-    public static String getBlockEnd() {
-        return getConf().getString("reader.page.block-end");
+    public static SiteInfo[] getSites() {
+        int count = getConf().getList("sites.site.name").size();
+        SiteInfo[] result = new SiteInfo[count];
+        for(int i = 0; i<count; i++) {
+            result[i] = SiteInfo.loadFromConf(getConf(), i);
+        }
+        return result;
     }
 
     public static String getDelimeter() {

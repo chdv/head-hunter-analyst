@@ -49,7 +49,7 @@ public class ForkJoinRunnerTest extends TestCase {
                 }
             });
         }
-        runner.await();
+        runner.awaitJobsDone();
         assertTrue(numberSet.size() == 100);
         for(int i = 0; i<100; i++) {
             assertTrue(numberSet.remove(i));
