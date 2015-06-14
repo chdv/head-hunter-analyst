@@ -1,4 +1,4 @@
-package com.dch.app.analyst.format;
+package com.dch.app.analyst.writer;
 
 import com.dch.app.analyst.parser.JobEntity;
 

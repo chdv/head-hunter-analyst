@@ -1,8 +1,8 @@
 package com.dch.app.analyst;
 
-import com.dch.app.analyst.format.HtmlJobsWriter;
-import com.dch.app.analyst.format.JobsWriter;
-import com.dch.app.analyst.format.Renamer;
+import com.dch.app.analyst.writer.HtmlJobsWriter;
+import com.dch.app.analyst.writer.JobsWriter;
+import com.dch.app.analyst.writer.Renamer;
 import com.dch.app.analyst.parser.SiteInfo;
 import com.dch.app.analyst.parser.SiteParser;
 import com.dch.app.analyst.util.FileUtils;

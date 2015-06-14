@@ -1,4 +1,4 @@
-package com.dch.app.analyst.format;
+package com.dch.app.analyst.writer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

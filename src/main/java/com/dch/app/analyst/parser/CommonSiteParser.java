@@ -1,7 +1,7 @@
 package com.dch.app.analyst.parser;
 
 import com.dch.app.analyst.AnalystConfiguration;
-import com.dch.app.analyst.format.JobsWriter;
+import com.dch.app.analyst.writer.JobsWriter;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
