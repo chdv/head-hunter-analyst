@@ -3,10 +3,7 @@ package com.dch.app.analyst.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -43,5 +40,16 @@ public final class FileUtils {
         }
         zout.close();
         logger.debug("make archive {}", zipFile.getAbsolutePath());
+    }
+
+    public static boolean deleteRecursive(File path) throws FileNotFoundException {
+        if (!path.exists()) throw new FileNotFoundException(path.getAbsolutePath());
+        boolean ret = true;
+        if (path.isDirectory()){
+            for (File f : path.listFiles()){
+                ret = ret && FileUtils.deleteRecursive(f);
+            }
+        }
+        return ret && path.delete();
     }
 }

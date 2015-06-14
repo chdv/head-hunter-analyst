@@ -46,6 +46,9 @@ public class AnalystMain {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
         String dir = OUT_DIR + File.separator + format.format(new Date());
         File dirFile = new File(dir);
+        if(dirFile.exists()) {
+            FileUtils.deleteRecursive(dirFile);
+        }
         dirFile.mkdirs();
         File archiveDir = new File(ARCHIVE_DIR);
         archiveDir.mkdirs();

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Set;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -16,6 +17,10 @@ public class ForkJoinRunnerImpl implements ForkJoinRunner {
     private volatile Set<RunnerTask> tasksSet = new ConcurrentHashSet<RunnerTask>();
 
     private ReentrantLock mainLock = new ReentrantLock();
+
+    private Condition whaitDoneLock = mainLock.newCondition();
+
+    private boolean useSpinLock = false;
 
     private ThreadPool pool = null;
 
@@ -31,6 +36,14 @@ public class ForkJoinRunnerImpl implements ForkJoinRunner {
             public void run() {
                 runnable.run();
                 tasksSet.remove(task);
+                if(!useSpinLock && tasksSet.isEmpty()) {
+                    mainLock.lock();
+                    try {
+                        whaitDoneLock.signalAll();
+                    } finally {
+                        mainLock.unlock();
+                    }
+                }
             }
         });
     }
@@ -39,6 +52,11 @@ public class ForkJoinRunnerImpl implements ForkJoinRunner {
         mainLock.lock();
         try {
             while(!tasksSet.isEmpty()) {
+                try {
+                    if(!useSpinLock)
+                        whaitDoneLock.await();
+                } catch (InterruptedException ignore) {
+                }
             }
         } finally {
             mainLock.unlock();
