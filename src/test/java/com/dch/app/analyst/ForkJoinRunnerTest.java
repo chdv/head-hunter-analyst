@@ -2,6 +2,7 @@ package com.dch.app.analyst;
 
 import com.dch.app.analyst.util.ConcurrentHashSet;
 import com.dch.app.analyst.util.ForkJoinRunner;
+import com.dch.app.analyst.util.ForkJoinRunnerImpl;
 import com.dch.app.analyst.util.FixedThreadPool;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -27,7 +28,7 @@ public class ForkJoinRunnerTest extends TestCase {
     }
 
     public void testRunner() throws Exception {
-        ForkJoinRunner runner = new ForkJoinRunner(new FixedThreadPool(20));
+        ForkJoinRunner runner = new ForkJoinRunnerImpl(new FixedThreadPool(20));
         Set<Integer> numberSet = new ConcurrentHashSet<Integer>();
         for(int i = 0; i<100; i++) {
             final int finalI = i;

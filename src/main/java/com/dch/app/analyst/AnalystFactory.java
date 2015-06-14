@@ -2,6 +2,7 @@ package com.dch.app.analyst;
 
 import com.dch.app.analyst.util.FixedThreadPool;
 import com.dch.app.analyst.util.ForkJoinRunner;
+import com.dch.app.analyst.util.ForkJoinRunnerImpl;
 import com.dch.app.analyst.util.ThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public final class AnalystFactory {
     }
 
     public static ForkJoinRunner createForkJoinRunner() {
-        return new ForkJoinRunner(getMainThreadPool());
+        return new ForkJoinRunnerImpl(getMainThreadPool());
     }
 
 }
