@@ -1,16 +1,15 @@
 package com.dch.app.analyst;
 
-import com.dch.app.analyst.writer.HtmlJobsWriter;
-import com.dch.app.analyst.writer.JobsWriter;
-import com.dch.app.analyst.writer.Renamer;
 import com.dch.app.analyst.parser.SiteInfo;
 import com.dch.app.analyst.parser.SiteParser;
 import com.dch.app.analyst.util.FileUtils;
 import com.dch.app.analyst.util.ForkJoinRunner;
+import com.dch.app.analyst.writer.HtmlJobsWriter;
+import com.dch.app.analyst.writer.JobsWriter;
+import com.dch.app.analyst.writer.Renamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -102,10 +101,6 @@ public class AnalystMain {
         parser.setJobsWriter(jobsWriter);
         parser.readJobs(keyWord);
         jobsWriter.writeBottom();
-
-        if(AnalystConfiguration.isOpenInBrowser()) {
-            Desktop.getDesktop().browse(newFile.toURI());
-        }
     }
 
 

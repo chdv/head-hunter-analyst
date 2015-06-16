@@ -1,8 +1,10 @@
 package com.dch.app.analyst.writer;
 
+import com.dch.app.analyst.AnalystConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,5 +27,9 @@ public class Renamer {
         Path p = Files.move(Paths.get(name),
                 Paths.get(name + "-" + count + ".html"));
         logger.debug("result saved to \"{}\"", p.toAbsolutePath());
+
+        if(AnalystConfiguration.isOpenInBrowser()) {
+            Desktop.getDesktop().browse(p.toUri());
+        }
     }
 }
