@@ -1,9 +1,6 @@
 package com.dch.app.analyst;
 
-import com.dch.app.analyst.util.ConcurrentHashSet;
-import com.dch.app.analyst.util.ForkJoinRunner;
-import com.dch.app.analyst.util.ForkJoinRunnerImpl;
-import com.dch.app.analyst.util.FixedThreadPool;
+import com.dch.app.analyst.util.*;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -11,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Set;
+import java.util.concurrent.Executors;
 
 /**
  * Created by ִלטענטי on 12.06.2015.
@@ -56,4 +54,38 @@ public class ForkJoinRunnerTest extends TestCase {
             assertTrue(numberSet.remove(i));
         }
     }
+
+    public void testCompareExecutors() {
+        ForkJoinRunner runner = new ForkJoinRunnerImpl(new FixedThreadPool(20));
+        ForkJoinRunner service = new ForkJoinRunnerCommonImpl(Executors.newFixedThreadPool(20));
+        Runnable testRunnable = new Runnable() {
+            @Override
+            public void run() {
+                long k = 1;
+                for(int i = 1; i<100; i++ ){
+                    k = k*i;
+                }
+            }
+        };
+
+        for(int i = 1; i<50; i++ ) {
+            logger.debug("run new test");
+
+            TimeWatch watch = new TimeWatch("my");
+            for(int k = 1; k<5_000; k++ ){
+                runner.execute(testRunnable);
+            }
+            runner.awaitJobsDone();
+            watch.printMicro();
+
+            watch = new TimeWatch("common");
+            for(int k = 1; k<5_000; k++ ){
+                service.execute(testRunnable);
+            }
+            service.awaitJobsDone();
+            watch.printMicro();
+        }
+
+    }
+
 }

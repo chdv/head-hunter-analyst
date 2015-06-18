@@ -67,7 +67,7 @@ public class AnalystMain {
         }
         runner.awaitJobsDone();
         logger.debug("end work");
-        AnalystFactory.getMainThreadPool().stop();
+        AnalystFactory.shutDown();
 
         FileUtils.createZipArchive(dirFile, archiveDir);
     }

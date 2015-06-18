@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
-/** Класс для оценки времени исполнения блока
+/**
+ * Класс для оценки времени исполнения блока
  * Created by Дмитрий on 08.06.2015.
  */
 public class TimeWatch {
@@ -17,8 +18,15 @@ public class TimeWatch {
     long startTime = 0;
     long endTime = 0;
 
-    public TimeWatch() {
+    private String name;
+
+    public TimeWatch(String name) {
         startTime = getCurrentTime();
+        this.name = name;
+    }
+
+    public TimeWatch(){
+        this("");
     }
 
     public void stop() {
@@ -37,9 +45,9 @@ public class TimeWatch {
             stop();
         }
         if(unit != CURRENT_TIME_UNIT) {
-            logger.debug("{}", unit.convert(endTime - startTime, CURRENT_TIME_UNIT));
+            logger.debug("{} {}", name, unit.convert(endTime - startTime, CURRENT_TIME_UNIT));
         } else {
-            logger.debug("{}", endTime - startTime);
+            logger.debug("{} {}", name, endTime - startTime);
         }
     }
 

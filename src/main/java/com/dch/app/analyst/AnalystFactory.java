@@ -1,15 +1,14 @@
 package com.dch.app.analyst;
 
-import com.dch.app.analyst.util.FixedThreadPool;
-import com.dch.app.analyst.util.ForkJoinRunner;
-import com.dch.app.analyst.util.ForkJoinRunnerImpl;
-import com.dch.app.analyst.util.ThreadPool;
+import com.dch.app.analyst.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by ִלטענטי on 09.06.2015.
@@ -28,7 +27,7 @@ public final class AnalystFactory {
         return new FixedThreadPool(poolSize);
     }
 
-    public static ThreadPool getMainThreadPool() throws AnalystException {
+    private static ThreadPool getMainThreadPool() throws AnalystException {
         if (mainThreadPool == null) {
             synchronized (AnalystFactory.class) {
                 if (mainThreadPool == null) {
@@ -49,6 +48,38 @@ public final class AnalystFactory {
 
     public static ForkJoinRunner createForkJoinRunner() {
         return new ForkJoinRunnerImpl(getMainThreadPool());
+    }
+
+    public static void shutDown() {
+        if(mainThreadPool!=null) {
+            mainThreadPool.stop();
+        }
+        if(executorService!=null) {
+            executorService.shutdown();
+        }
+    }
+
+    private static volatile ExecutorService executorService = null;
+
+    private static ExecutorService createExecutorService() {
+        int poolSize = Runtime.getRuntime().availableProcessors() * AnalystConfiguration.getThreadsCountPerCore();
+        logger.debug("create ExecutorService on " + poolSize + " threads");
+        return Executors.newFixedThreadPool(poolSize);
+    }
+
+    private static ExecutorService getMainExecutorService() throws AnalystException {
+        if (executorService == null) {
+            synchronized (AnalystFactory.class) {
+                if (executorService == null) {
+                    executorService = createExecutorService();
+                }
+            }
+        }
+        return executorService;
+    }
+
+    public static ForkJoinRunner createCommonForkJoinRunner() {
+        return new ForkJoinRunnerCommonImpl(getMainExecutorService());
     }
 
 }
