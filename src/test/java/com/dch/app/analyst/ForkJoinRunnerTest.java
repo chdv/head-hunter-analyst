@@ -57,7 +57,7 @@ public class ForkJoinRunnerTest extends TestCase {
 
     public void testCompareExecutors() {
         ForkJoinRunner runner = new ForkJoinRunnerImpl(new FixedThreadPool(20));
-        ForkJoinRunner service = new ForkJoinRunnerCommonImpl(Executors.newFixedThreadPool(20));
+        ForkJoinRunner service = new ForkJoinRunnerBaseImpl(Executors.newFixedThreadPool(20));
         Runnable testRunnable = new Runnable() {
             @Override
             public void run() {

@@ -3,8 +3,8 @@ package com.dch.app.analyst.writer;
 import com.dch.app.analyst.AnalystConfiguration;
 import com.dch.app.analyst.parser.JobEntity;
 import com.dch.app.analyst.parser.SiteInfo;
-import com.dch.app.analyst.util.FixedThreadPool;
-import com.dch.app.analyst.util.ThreadPool;
+import com.dch.app.analyst.util.SingleThreadExecutor;
+import com.dch.app.analyst.util.SingleThreadExecutorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class HtmlJobsWriter implements JobsWriter {
 
     private Writer writer;
 
-    private ThreadPool pool = new FixedThreadPool(1);
+    private SingleThreadExecutor pool = new SingleThreadExecutorImpl();
 
     private String keyWorld;
 

@@ -79,7 +79,7 @@ public final class AnalystFactory {
     }
 
     public static ForkJoinRunner createCommonForkJoinRunner() {
-        return new ForkJoinRunnerCommonImpl(getMainExecutorService());
+        return new ForkJoinRunnerBaseImpl(getMainExecutorService());
     }
 
 }

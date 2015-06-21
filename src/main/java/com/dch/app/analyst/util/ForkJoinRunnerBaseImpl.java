@@ -14,15 +14,15 @@ import java.util.concurrent.Future;
  * Реализация на базе стандартного фреймворка для работы с многопоточностью
  * Created by Дмитрий on 12.06.2015.
  */
-public class ForkJoinRunnerCommonImpl implements ForkJoinRunner {
+public class ForkJoinRunnerBaseImpl implements ForkJoinRunner {
 
-    private Logger logger = LoggerFactory.getLogger(ForkJoinRunnerCommonImpl.class);
+    private Logger logger = LoggerFactory.getLogger(ForkJoinRunnerBaseImpl.class);
 
     private ExecutorService pool = null;
 
     private List<Future<?>> futureList = AnalystFactory.createList();
 
-    public ForkJoinRunnerCommonImpl(ExecutorService pool) {
+    public ForkJoinRunnerBaseImpl(ExecutorService pool) {
         this.pool = pool;
     }
 
