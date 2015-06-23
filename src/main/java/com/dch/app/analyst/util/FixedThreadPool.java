@@ -53,8 +53,8 @@ public class FixedThreadPool implements ThreadPool {
                     if(executionRunnable!=stopRunnable) {
                         executionRunnable.run();
                     }
-                } catch (InterruptedException ignored) {
-                    /*NOP*/
+                } catch (InterruptedException e) {
+                    run = false;
                 } catch (RuntimeException e) {
                     logger.error(e.getMessage(), e);
                 }
