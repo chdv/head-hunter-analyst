@@ -31,18 +31,15 @@ public class ForkJoinRunnerImpl implements ForkJoinRunner {
     public void execute(Runnable runnable) {
         RunnerTask task = new RunnerTask();
         tasksSet.add(task);
-        pool.execute(new Runnable() {
-            @Override
-            public void run() {
-                runnable.run();
-                tasksSet.remove(task);
-                if(tasksSet.isEmpty()) {
-                    mainLock.lock();
-                    try {
-                        whaitDoneLock.signalAll();
-                    } finally {
-                        mainLock.unlock();
-                    }
+        pool.execute(() -> {
+            runnable.run();
+            tasksSet.remove(task);
+            if(tasksSet.isEmpty()) {
+                mainLock.lock();
+                try {
+                    whaitDoneLock.signalAll();
+                } finally {
+                    mainLock.unlock();
                 }
             }
         });

@@ -62,11 +62,8 @@ public class FixedThreadPool implements ThreadPool {
         }
     }
 
-    private Runnable stopRunnable = new Runnable() {
-        @Override
-        public void run() {
-            /* NOP */
-        }
+    private Runnable stopRunnable = () -> {
+        /* NOP */
     };
 
     public boolean isRun() {
