@@ -47,7 +47,7 @@ public class FixedThreadPool implements ThreadPool {
 
     private class PoolWorker implements Runnable {
         public void run() {
-            while (run) {
+            while (run && !Thread.currentThread().isInterrupted()) {
                 try {
                     Runnable executionRunnable = runQueue.take();
                     if(executionRunnable!=stopRunnable) {
