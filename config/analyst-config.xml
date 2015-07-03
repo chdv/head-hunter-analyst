@@ -22,11 +22,12 @@
         <site>
             <name>yandex</name>
             <encoding>UTF-8</encoding>
-            <url><![CDATA[https://rabota.yandex.ru/search.xml/?text=%1$s&page_num=%2$d]]></url>
+            <url><![CDATA[https://rabota.yandex.ru/search?text=%1$s&page_num=%2$d]]></url>
             <page-from>1</page-from>
             <parser-class>com.dch.app.analyst.parser.CommonSiteParser</parser-class>
-            <job-info-block-start><![CDATA[<div class="b-serp-item__inner i-clearfix">]]></job-info-block-start>
-            <job-info-block-end><![CDATA[<div class="b-serp-item__left"></div><div class="b-serp-item__right"><div class="b-ugc-item__actions i-clearfix">]]></job-info-block-end>
+            <job-info-block-start><![CDATA[<div class="clearfix">]]></job-info-block-start>
+            <job-info-block-end><![CDATA[</td></tr><tr class="serp-vacancy"><td class="serp-vacancy__cell">]]></job-info-block-end>
+            <job-info-block-end><![CDATA[</td></tr></table><div class="pager pager_nav_yes pager]]></job-info-block-end>
         </site>
     </sites>
     <writer>

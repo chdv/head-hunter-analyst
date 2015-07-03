@@ -2,10 +2,16 @@ package com.dch.app.analyst.parser;
 
 import com.dch.app.analyst.AnalystConfiguration;
 import com.dch.app.analyst.writer.JobsWriter;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
+import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +40,23 @@ public class CommonSiteParser implements SiteParser {
         this.jobsWriter = jobsWriter;
     }
 
+    private RedirectStrategy noRedirectStrategy = new RedirectStrategy() {
+        @Override
+        public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+            return false;
+        }
+        @Override
+        public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+            return null;
+        }
+    };
+
     public void readJobs(String keyWord) throws SiteParserException {
         try {
-            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpClientBuilder builder = HttpClientBuilder.create();
+            builder.setRedirectStrategy(noRedirectStrategy);
+            CloseableHttpClient httpclient = builder.build();
+
             int pageNum = siteInfo.getPageFrom();
             boolean findJobs = true;
             while(findJobs) {
@@ -81,9 +101,15 @@ public class CommonSiteParser implements SiteParser {
         if(s.hasNext()) s.next();
         while(s.hasNext() ) {
             String currentLine = s.next();
-            currentLine = currentLine.substring(
-                    0,
-                    currentLine.indexOf(siteInfo.getJobInfoBlockEnd()));
+            for(String end : siteInfo.getJobInfoBlockEnd()) {
+                int iend = currentLine.indexOf(end);
+                if(iend > 0) {
+                    currentLine = currentLine.substring(
+                            0,
+                            iend);
+                    break;
+                }
+            }
             jobsWriter.writeJob(new JobEntity(currentLine));
             findJobs = true;
         }

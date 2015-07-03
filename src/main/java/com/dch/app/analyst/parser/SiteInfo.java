@@ -12,7 +12,7 @@ public class SiteInfo {
     private String url;
     private String parserClass;
     private String jobInfoBlockStart;
-    private String jobInfoBlockEnd;
+    private String[] jobInfoBlockEnd;
     private String encoding;
     private int pageFrom;
 
@@ -40,11 +40,11 @@ public class SiteInfo {
         this.jobInfoBlockStart = jobInfoBlockStart;
     }
 
-    public String getJobInfoBlockEnd() {
+    public String[] getJobInfoBlockEnd() {
         return jobInfoBlockEnd;
     }
 
-    public void setJobInfoBlockEnd(String jobInfoBlockEnd) {
+    public void setJobInfoBlockEnd(String[] jobInfoBlockEnd) {
         this.jobInfoBlockEnd = jobInfoBlockEnd;
     }
 
@@ -79,7 +79,7 @@ public class SiteInfo {
         result.setEncoding(conf.getString("sites.site(" + indx + ").encoding"));
         result.setParserClass(conf.getString("sites.site(" + indx + ").parser-class"));
         result.setJobInfoBlockStart(conf.getString("sites.site(" + indx + ").job-info-block-start"));
-        result.setJobInfoBlockEnd(conf.getString("sites.site(" + indx + ").job-info-block-end"));
+        result.setJobInfoBlockEnd(conf.getStringArray("sites.site(" + indx + ").job-info-block-end"));
         result.setPageFrom(conf.getInt("sites.site(" + indx + ").page-from"));
         return result;
     }
