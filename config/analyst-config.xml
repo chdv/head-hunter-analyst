@@ -28,6 +28,7 @@
             <job-info-block-start><![CDATA[<div class="clearfix">]]></job-info-block-start>
             <job-info-block-end><![CDATA[</td></tr><tr class="serp-vacancy"><td class="serp-vacancy__cell">]]></job-info-block-end>
             <job-info-block-end><![CDATA[</td></tr></table><div class="pager pager_nav_yes pager]]></job-info-block-end>
+            <job-info-block-end><![CDATA[</td></tr></table><div class="search-results__little-found">]]></job-info-block-end>
         </site>
     </sites>
     <writer>

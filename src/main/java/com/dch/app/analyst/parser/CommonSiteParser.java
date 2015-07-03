@@ -8,8 +8,8 @@ import org.apache.http.ProtocolException;
 import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
@@ -32,6 +32,8 @@ public class CommonSiteParser implements SiteParser {
 
     private JobsWriter jobsWriter;
 
+    private boolean redirect = false;
+
     public CommonSiteParser(SiteInfo info) {
         siteInfo = info;
     }
@@ -40,14 +42,15 @@ public class CommonSiteParser implements SiteParser {
         this.jobsWriter = jobsWriter;
     }
 
-    private RedirectStrategy noRedirectStrategy = new RedirectStrategy() {
+    private RedirectStrategy noRedirectStrategy = new DefaultRedirectStrategy() {
         @Override
         public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+            boolean red = super.isRedirected(request, response, context);
+
+            if(red) {
+                redirect = true;
+            }
             return false;
-        }
-        @Override
-        public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
-            return null;
         }
     };
 
@@ -79,8 +82,13 @@ public class CommonSiteParser implements SiteParser {
     protected boolean parseUrl(String url, CloseableHttpClient httpclient) throws Exception {
         boolean findJobs = false;
         HttpGet httpGet = new HttpGet(url);
-        logger.debug("load data from {}", url);
         CloseableHttpResponse response = httpclient.execute(httpGet);
+
+        if(redirect) {
+            return false;
+        }
+
+        logger.debug("load data from {}", url);
 
         Reader reader = new InputStreamReader(
                 response.getEntity().getContent(),
@@ -107,11 +115,12 @@ public class CommonSiteParser implements SiteParser {
                     currentLine = currentLine.substring(
                             0,
                             iend);
+                    findJobs = true;
                     break;
                 }
             }
-            jobsWriter.writeJob(new JobEntity(currentLine));
-            findJobs = true;
+            if(findJobs)
+                jobsWriter.writeJob(new JobEntity(currentLine));
         }
         return findJobs;
     }
